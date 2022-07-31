@@ -69,22 +69,20 @@ int main(int argc, char** argv){
         
         cap >> img_pre;
         cv::resize(img_pre, img, cv::Size(320, 160));
-        img_cropped_mat = img(cv::Rect(0, 35, 320, 70));
+        img_cropped_mat = img(cv::Rect(0, 35, 320, 70));    //set ROI
         cv::cvtColor(img_cropped_mat, img_cropped_rgb_mat, cv::COLOR_BGR2RGB);
         img_cropped_rgb_mat.convertTo(m_img_cropped_rgb_f_mat, CV_32FC3, (1.0 / 127.5), -1.0);
-        cv::imshow("cropped img", img_cropped_rgb_mat);
+        cv::imshow("cropped img", img_cropped_rgb_mat); //this image will be inputed to the pilotNet
         cv::imshow("camera img", img);
 
         key = cv::waitKey(1000/FPS);
         if(key == 'w'){
             write(fd, go, 1);
-
         } else if(key == 'd'){
             angle += 0.25;
             if(angle >= 1)
                 angle = 1;
             write(fd, right, 1);
-        
         } else if(key == 'a'){
             angle -= 0.25;
                 if(angle <= -1)
@@ -94,10 +92,8 @@ int main(int argc, char** argv){
         } else if(key == 's'){
             angle = 0;
             write(fd, stop, 1);
-
         } else if(key == 'x'){
             write(fd, back, 1);
-
         } else if(key == 'f'){
             angle = 0;
             write(fd, center, 1);
@@ -122,7 +118,6 @@ int main(int argc, char** argv){
             save_driving_log(output_log_file_path, driving_log);
             frame_no ++;
         }
-               
     }
     std::cout << "done.." << std::endl;
     write(fd, stop, 1);
