@@ -29,6 +29,7 @@ int main(int argc, char** argv){
         exit(-1);
     }
 
+
     int recording = atoi(argv[2]);
     std::string save_path = argv[1];
 
@@ -62,12 +63,16 @@ int main(int argc, char** argv){
     
     cv::Mat img_pre;
     cv::Mat img_cropped_mat;
+    cv::Mat img_cropped_rgb_mat;
+    cv::Mat m_img_cropped_rgb_f_mat;
     while(1){
         
         cap >> img_pre;
         cv::resize(img_pre, img, cv::Size(320, 160));
         img_cropped_mat = img(cv::Rect(0, 35, 320, 70));
-        cv::imshow("cropped img", img_cropped_mat);
+        cv::cvtColor(img_cropped_mat, img_cropped_rgb_mat, cv::COLOR_BGR2RGB);
+        img_cropped_rgb_mat.convertTo(m_img_cropped_rgb_f_mat, CV_32FC3, (1.0 / 127.5), -1.0);
+        cv::imshow("cropped img", img_cropped_rgb_mat);
         cv::imshow("camera img", img);
 
         key = cv::waitKey(1000/FPS);
@@ -124,8 +129,7 @@ int main(int argc, char** argv){
     return 0;
 }
 
-void 
-openSerialPort()
+void openSerialPort()
 {
     struct termios toptions;
 
